@@ -16,8 +16,8 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    - run: |
-        git config user.email "${{secrets.AUTHOR_EMAIL}}"
-        git config user.name "${{secrets.AUTHOR_NAME}}"
-        git config --list
-    - run: npm run deploy
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
