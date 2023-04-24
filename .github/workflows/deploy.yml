@@ -17,7 +17,7 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: |
-        git config user.email "${{secrets.AUHTOR_EMAIL}}"
-        git config user.name "${{secrets.AUHTOR_NAME}}"
+        git config user.email "${{secrets.AUTHOR_EMAIL}}"
+        git config user.name "${{secrets.AUTHOR_NAME}}"
         git config --list
     - run: npm run deploy
