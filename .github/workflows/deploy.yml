@@ -14,10 +14,11 @@ jobs:
       with:
         node-version: 18.x
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+    - name: Install and Build 🔧 
+      run: |
+        npm ci
+        npm run build
+    - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
