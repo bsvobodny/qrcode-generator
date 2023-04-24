@@ -20,6 +20,6 @@ jobs:
         npm ci
         npm run build
     - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: dist
