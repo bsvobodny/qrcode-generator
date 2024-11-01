@@ -1,10 +1,12 @@
 import QRCode from 'qrcode';
 import { useRef, useState } from 'react';
 import './App.scss';
-import myLogo from './assets/14125410.jpeg';
+import me from './assets/me.jpeg';
+import mo from './assets/mo.png';
+import dd2m from './assets/dd2m.jpg';
 
 function App() {
-  const [data, setData] = useState('')
+  const [data, setData] = useState({image: '1', codeContent: ''});
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -51,7 +53,7 @@ function App() {
       imgQRCode.crossOrigin = "anonymous";
 
       let logo = new Image();
-      logo.src = myLogo;
+      logo.src = data.image;
       logo.crossOrigin = "anonymous";
 
       if(!canvasRef?.current) {
@@ -76,8 +78,8 @@ function App() {
             0, 0, canvasWidth, canvasWidth
           );
 
-          const logoSize_Horizontal = canvasWidth * 0.17;
-          const logoSize_Vertical = canvasWidth * 0.17;
+          const logoSize_Horizontal = canvasWidth * 0.25;
+          const logoSize_Vertical = canvasWidth * 0.25;
 
           const imageStart_Horizontal = canvasWidth / 2 - (logoSize_Horizontal / 2);
           const imageStart_Vertical = canvasHeight / 2 - (logoSize_Vertical / 2);
@@ -91,12 +93,33 @@ function App() {
       }
   }
 
+  const selectImage = (value:string) => {
+    switch (value) {
+      case '1':
+        return setData({...data,image:dd2m})
+      case '2':
+        return setData({...data,image:mo})
+      case '3':
+        return setData({...data,image:me})
+      default:
+        return setData({...data,image:me})
+    }
+  }
+
   return (
     <>
       <h1>QR Code Generator</h1>
       <form className='data-form'>
-        <textarea className='data-container' onChange={(e)=> setData(e.target.value)} />
-        <button type='button' onClick={() => generateQRCode(data)}>Generate QR Code</button>
+        <textarea className='data-container' onChange={(e)=> setData({...data, codeContent:e.target.value})} />
+        <div className='image-selector'>
+          <label htmlFor="imageSelector">Choose an icon</label>
+          <select id="imageSelector" onChange={(e)=>selectImage(e.target.value)}>
+            <option value="1">Double Défi 2 Mario</option>
+            <option value="2">Movember</option>
+            <option value="3">Moi</option>
+          </select>
+        </div>
+        <button type='button' onClick={() => generateQRCode(data.codeContent)}>Generate QR Code</button>
       </form>
       <canvas ref={canvasRef}  width="400" height="400"/>
     </>
