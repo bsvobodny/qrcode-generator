@@ -6,7 +6,7 @@ import mo from './assets/mo.png';
 import dd2m from './assets/dd2m.jpg';
 
 function App() {
-  const [data, setData] = useState({image: '1', codeContent: ''});
+  const [data, setData] = useState({image: '', codeContent: ''});
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -96,15 +96,36 @@ function App() {
   const selectImage = (value:string) => {
     switch (value) {
       case '1':
-        return setData({...data,image:dd2m})
+        return setData({...data, image:dd2m})
       case '2':
-        return setData({...data,image:mo})
+        return setData({...data, image:mo})
       case '3':
-        return setData({...data,image:me})
+        return setData({...data, image:me})
       default:
-        return setData({...data,image:me})
+        return setData({...data, image: ""})
     }
   }
+
+  const convertToBase64 = (file: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setData({...data, image: reader.result as string});
+      // setImageBase64( as string); // résultat base64
+    };
+    reader.onerror = (error) => {
+      console.error("Erreur de lecture de fichier:", error);
+    };
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      convertToBase64(file)
+      
+    }
+  };
+
 
   return (
     <>
@@ -114,11 +135,13 @@ function App() {
         <div className='image-selector'>
           <label htmlFor="imageSelector">Choose an icon</label>
           <select id="imageSelector" onChange={(e)=>selectImage(e.target.value)}>
+            <option value="">Select predefined</option>
             <option value="1">Double Défi 2 Mario</option>
             <option value="2">Movember</option>
             <option value="3">Moi</option>
           </select>
         </div>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
         <button type='button' onClick={() => generateQRCode(data.codeContent)}>Generate QR Code</button>
       </form>
       <canvas ref={canvasRef}  width="400" height="400"/>
